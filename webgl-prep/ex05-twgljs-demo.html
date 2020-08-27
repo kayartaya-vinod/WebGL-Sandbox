@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>twegljs demo</title>
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+    </style>
+
+    <script src="twgl-full.min.js"></script>
+    <script id="vs" type="not-js">
+// we will always pass a 0 to 1 unit quad
+// and then use matrices to manipulate it
+attribute vec4 position;   
+
+uniform mat4 matrix;
+uniform mat4 textureMatrix;
+
+varying vec2 texcoord;
+
+void main () {
+  gl_Position = matrix * position;
+  
+  texcoord = (textureMatrix * position).xy;
+}
+</script>
+    <script id="fs" type="not-js">
+precision mediump float;
+
+varying vec2 texcoord;
+uniform sampler2D texture;
+
+void main() {
+  if (texcoord.x < 0.0 || texcoord.x > 1.0 ||
+      texcoord.y < 0.0 || texcoord.y > 1.0) {
+    discard;
+  }
+  gl_FragColor = texture2D(texture, texcoord);
+}
+</script>
+</head>
+
+<body>
+    <canvas id="c"></canvas>
+
+    <script src="ex05-twgljs-demo.js"></script>
+</body>
+
+</html>
